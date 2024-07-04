@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,30 +26,36 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
-        <div class="container-fluid" id="navbar-container">
-            <a class="navbar-brand" href="index.php" id="navbar-brand">Nook's Cranny</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <div class="navbar-nav mx-auto" id="navbar-nav-center">
-                    <a class="nav-link active" href="#" id="nav-item-home">About</a>
-                    <a class="nav-link" href="#" id="nav-item-about">Furniture</a>
-                    <a class="nav-link" href="#" id="nav-item-services">Clothes</a>
-                    <a class="nav-link" href="#" id="nav-item-contact">Miscellaneous</a>
-                </div>
-                <ul class="navbar-nav ms-auto" id="navbar-nav-right">
-                    <li class="nav-item" id="nav-item-cart">
-                        <a class="nav-link" href="#">Cart</a>
-                    </li>
-                    <li class="nav-item" id="nav-item-login">
-                        <a class="nav-link" href="pages\loginsignup.php">Login</a>
-                    </li>
-                </ul>
+<nav class="navbar navbar-expand-lg fixed-top" id="navbar">
+    <div class="container-fluid" id="navbar-container">
+        <a class="navbar-brand" href="index.php" id="navbar-brand">Nook's Cranny</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <div class="navbar-nav mx-auto" id="navbar-nav-center">
+                <a class="nav-link active" href="#" id="nav-item-home">About</a>
+                <a class="nav-link" href="#" id="nav-item-about">Furniture</a>
+                <a class="nav-link" href="#" id="nav-item-services">Clothes</a>
+                <a class="nav-link" href="#" id="nav-item-contact">Miscellaneous</a>
             </div>
+            <ul class="navbar-nav ms-auto" id="navbar-nav-right">
+                <li class="nav-item" id="nav-item-cart">
+                    <a class="nav-link" href="#">Cart</a>
+                </li>
+                <li class="nav-item" id="nav-item-login">
+                    <?php if (isset($_SESSION['username'])): ?>
+                        <a class="nav-link" href="userprofile.php"><?php echo htmlspecialchars($_SESSION['name']); ?></a>
+                        <a class="nav-link" href="php/logout.php">Logout</a>
+                    <?php else: ?>
+                        <a class="nav-link" href="pages/loginsignup.php">Login</a>
+                    <?php endif; ?>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
+
 
   <header>
     <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
