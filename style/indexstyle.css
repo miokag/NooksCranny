@@ -1,4 +1,17 @@
-/* Carousel item styles */
+@font-face {
+    font-family: Seurat;
+    font-style: normal;
+    font-weight: normal;
+    src: url(fonts/SeuratProB.otf) format("opentype");
+}
+
+* {
+    box-sizing: border-box;
+    cursor: url('../img/Pointer.png'), auto;
+    font-family: Seurat;
+}
+
+
 .carousel-item {
     height: 80vh;
     min-height: 350px;
@@ -11,22 +24,38 @@
 
 #navbar {
     background: #ffdfa0;
-    padding: 0.5rem 1rem; 
-}
-
-#navbar-container {
-    padding: 0 15px; 
-}
-
-#navbar-brand {
-    padding-right: 15px; 
-}
-
-#navbar-nav-center {
+    padding: 0.5rem 1rem;
     display: flex;
-    justify-content: center;
+    justify-content: space-between; /* Align items at the ends */
+  }
+  
+  #navbar-container {
+    display: flex;
+    align-items: center; /* Center items vertically */
+  }
+  
+  #navbar-nav-center {
+    display: flex;
+    justify-content: center; /* Center items horizontally */
     flex-grow: 1;
-}
+    padding-right: 5rem;
+  }
+  
+  .nav-link {
+    padding: 0 15px; /* Adjust padding as needed */
+    text-decoration: none;
+    color: #331300;
+    transition: color 0.3s;
+  }
+  
+  .nav-link:hover {
+    color: #ffeba7;
+  }
+  
+  .condition-container {
+      font-size: small;
+      color: red;
+  }
 
 #navbar-nav-right {
     margin-left: auto; 

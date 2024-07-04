@@ -1,17 +1,16 @@
 @font-face {
-    font-family: Seurat;
-    font-style: normal;
-    font-weight: normal;
-    src: url(fonts/SeuratProB.otf) format("opentype");
+  font-family: Seurat;
+  font-style: normal;
+  font-weight: normal;
+  src: url(fonts/SeuratProB.otf) format("opentype");
 }
 
 * {
-    box-sizing: border-box;
-    cursor: url('../imgs/Pointer.png'), auto;
-    font-family: Seurat;
+  box-sizing: border-box;
+  cursor: url('../img/Pointer.png'), auto;
+  font-family: Seurat;
 }
 
-/* Updated Navbar CSS */
 #navbar {
   background: #ffdfa0;
   padding: 0.5rem 1rem;
@@ -47,13 +46,16 @@
     color: red;
 }
 
+#navbar-nav-right {
+  margin-left: auto; 
+}
+
+
 .valid {
     color: green !important;
 }
 
 body{
-	font-weight: 300;
-	font-size: 15px;
 	line-height: 1.7;
 	background-image: url("https://cdn.mos.cms.futurecdn.net/G79YngbW86RJ2QtzFfZEu3.jpg");
   &:before {
