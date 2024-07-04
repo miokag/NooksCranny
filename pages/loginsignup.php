@@ -26,7 +26,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
         <div class="container-fluid" id="navbar-container">
-            <a class="navbar-brand" href="#" id="navbar-brand">Nook's Cranny</a>
+            <a class="navbar-brand" href="../index.php" id="navbar-brand">Nook's Cranny</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -50,44 +50,43 @@
     </nav>
 
     <div class="section">
-		<div class="container">
-			<div class="row full-height justify-content-center">
-				<div class="col-12 text-center align-self-center py-5">
-					<div class="section pb-5 pt-5 pt-sm-2 text-center">
-						<!-- <h6 class="mb-0 pb-3"><span>Log In </span><span>Sign Up</span></h6> -->
-			          	<input class="checkbox" type="checkbox" id="reg-log" name="reg-log"/>
-			          	<label for="reg-log"></label>
-						<div class="card-3d-wrap mx-auto">
-							<div class="card-3d-wrapper">
-								<div class="card-back">
-									<div class="center-wrap">
-										<form action="../php/login.php" method="post">
+        <div class="container">
+            <div class="row full-height justify-content-center">
+                <div class="col-12 text-center align-self-center py-5">
+                    <div class="section pb-5 pt-5 pt-sm-2 text-center">
+                        <input class="checkbox" type="checkbox" id="reg-log" name="reg-log"/>
+                        <label for="reg-log"></label>
+                        <div class="card-3d-wrap mx-auto">
+                            <div class="card-3d-wrapper">
+                                <div class="card-back">
+                                    <div class="center-wrap">
+                                        <form action="../php/login.php" method="post">
                                             <div class="section text-center">
                                                 <h4 class="mb-4 pb-3">Log In</h4>
-                                                <?php if(isset($_GET['error'])) { ?>
-                                                    <p class="error"><?php echo $_GET['error']; ?></p>
+                                                <?php if(isset($_GET['loginerror'])) { ?>
+                                                    <p class="error"><?php echo $_GET['loginerror']; ?></p>
                                                 <?php } ?>
                                                 <div class="form-group">
                                                     <input type="text" name="loginusername" class="form-style" placeholder="Username" id="loginusername" autocomplete="off">
                                                     <i class="input-icon uil uil-at"></i>
-                                                </div>	
+                                                </div>
                                                 <div class="form-group mt-2">
                                                     <input type="password" name="loginpass" class="form-style" placeholder="Your Password" id="loginpass" autocomplete="off">
                                                     <i class="input-icon uil uil-lock-alt"></i>
-                                                </div> 
-                                                <button type="submit" class="btn mt-4">submit</button>
+                                                </div>
+                                                <button type="submit" class="btn mt-4">Submit</button>
                                                 <p class="mb-0 mt-4 text-center"><a href="forgotpass.html" class="link">Forgot your password?</a></p>
-                                              </div>
+                                            </div>
                                         </form>
-			      					</div>
-			      				</div>
-								<div class="card-front">
-									<div class="center-wrap">
+                                    </div>
+                                </div>
+                                <div class="card-front">
+                                    <div class="center-wrap">
                                         <form action="../php/signup.php" method="post">
                                             <div class="section text-center">
                                                 <h4 class="mb-4 pb-3">Sign Up</h4>
-                                                <?php if(isset($_GET['error'])) { ?>
-                                                    <p class="error"><?php echo $_GET['error']; ?></p>
+                                                <?php if(isset($_GET['signuperror'])) { ?>
+                                                    <p class="error"><?php echo $_GET['signuperror']; ?></p>
                                                 <?php } ?>
                                                 <?php if(isset($_GET['success'])) { ?>
                                                     <p class="success"><?php echo $_GET['success']; ?></p>
@@ -95,29 +94,27 @@
                                                 <div class="form-group">
                                                     <input type="text" name="username" class="form-style" placeholder="Username" id="username" autocomplete="off">
                                                     <i class="input-icon uil uil-user"></i>
-                                                </div>    
+                                                </div>
                                                 <div class="form-group mt-2">
                                                     <input type="password" name="userpass" class="form-style" placeholder="Your Password" id="userpass" autocomplete="off">
                                                     <i class="input-icon uil uil-lock-alt"></i>
                                                 </div>
                                                 <div class="form-group mt-2">
                                                     <input type="text" name="userfirstname" class="form-style" placeholder="Your Name" id="userfirstname" autocomplete="off">
-                                                    <i class="input-icon uil uil-lock-alt"></i>
+                                                    <i class="input-icon uil uil-user"></i>
                                                 </div>
                                                 <button type="submit" class="btn mt-4">Submit</button>
                                             </div>
                                         </form>
-				      					</div>
-			      					</div>
-			      				</div>
-			      			</div>
-			      		</div>
-			      	</div>
-		      	</div>
-	      	</div>
-	    </div>
-	</div>
-    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <script src="../scripts/uservalidation.js"></script>
 </body>

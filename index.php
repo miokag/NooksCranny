@@ -25,7 +25,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
         <div class="container-fluid" id="navbar-container">
-            <a class="navbar-brand" href="#" id="navbar-brand">Nook's Cranny</a>
+            <a class="navbar-brand" href="index.php" id="navbar-brand">Nook's Cranny</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
