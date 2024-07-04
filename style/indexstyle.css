@@ -1,0 +1,34 @@
+/* Carousel item styles */
+.carousel-item {
+    height: 80vh;
+    min-height: 350px;
+    background: no-repeat center center scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#navbar {
+    background: #ffdfa0;
+    padding: 0.5rem 1rem; 
+}
+
+#navbar-container {
+    padding: 0 15px; 
+}
+
+#navbar-brand {
+    padding-right: 15px; 
+}
+
+#navbar-nav-center {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+#navbar-nav-right {
+    margin-left: auto; 
+}
+
