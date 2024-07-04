@@ -1,6 +1,8 @@
 <?php
 include "db_conn.php";
 
+session_start();
+
 if (isset($_POST['loginusername']) && isset($_POST['loginpass'])) {
     function validate($data) {
         $data = trim($data);
@@ -11,6 +13,7 @@ if (isset($_POST['loginusername']) && isset($_POST['loginpass'])) {
 
     $loginusername = validate($_POST['loginusername']);
     $loginpass = validate($_POST['loginpass']);
+    $remember = isset($_POST['remember']);
 
     if (empty($loginusername)) {
         header("Location: ../pages/loginsignup.php?loginerror=Username is required");
@@ -25,18 +28,23 @@ if (isset($_POST['loginusername']) && isset($_POST['loginpass'])) {
         if (mysqli_num_rows($result) === 1) {
             $row = mysqli_fetch_assoc($result);
             if (password_verify($loginpass, $row['password'])) {
-                // Start a session and store user information
-                session_start();
+                // Store user information in session variables
                 $_SESSION['username'] = $row['username'];
                 $_SESSION['name'] = $row['name'];
+
+                if ($remember) {
+                    setcookie('username', $row['username'], time() + (86400 * 30), "/"); // 86400 = 1 day
+                    setcookie('userpass', $loginpass, time() + (86400 * 30), "/"); // Hashed password
+                }
+
                 header("Location: ../index.php");
                 exit();
             } else {
-                header("Location: ../pages/loginsignup.php?loginerror=Incorrect Username or Password");
+                header("Location: ../pages/loginsignup.php?loginerror=Incorrect username or password");
                 exit();
             }
         } else {
-            header("Location: ../pages/loginsignup.php?loginerror=Incorrect Username or Password");
+            header("Location: ../pages/loginsignup.php?loginerror=Incorrect username or password");
             exit();
         }
     }

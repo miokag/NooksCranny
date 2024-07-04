@@ -37,14 +37,6 @@
                     <a class="nav-link" href="#" id="nav-item-services">Clothes</a>
                     <a class="nav-link" href="#" id="nav-item-contact">Miscellaneous</a>
                 </div>
-                <ul class="navbar-nav ms-auto" id="navbar-nav-right">
-                    <li class="nav-item" id="nav-item-cart">
-                        <a class="nav-link" href="#">Cart</a>
-                    </li>
-                    <li class="nav-item" id="nav-item-login">
-                        <a class="nav-link" href="pages/loginsignup.html">Login</a>
-                    </li>
-                </ul>
             </div>
         </div>
     </nav>
@@ -73,6 +65,10 @@
                                                 <div class="form-group mt-2">
                                                     <input type="password" name="loginpass" class="form-style" placeholder="Your Password" id="loginpass" autocomplete="off">
                                                     <i class="input-icon uil uil-lock-alt"></i>
+                                                </div>
+                                                <div class="form-group mt-2 form-check">
+                                                    <input class="checkbox" type="checkbox" id="remember-me" name="remember-me"/>
+                                                    <label for="remember-me">Remember Me</label>
                                                 </div>
                                                 <button type="submit" class="btn mt-4">Submit</button>
                                                 <p class="mb-0 mt-4 text-center"><a href="forgotpass.html" class="link">Forgot your password?</a></p>
