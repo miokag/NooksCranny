@@ -70,7 +70,7 @@
                                                     <input class="checkbox" type="checkbox" id="remember-me" name="remember-me"/>
                                                     <label for="remember-me">Remember Me</label>
                                                 </div>
-                                                <button type="submit" class="btn mt-4">Submit</button>
+                                                <button type="submit" class="btn mt-4">Login</button>
                                                 <p class="mb-0 mt-4 text-center"><a href="forgotpass.html" class="link">Forgot your password?</a></p>
                                             </div>
                                         </form>

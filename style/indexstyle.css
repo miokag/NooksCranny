@@ -11,6 +11,11 @@
     font-family: Seurat;
 }
 
+body {
+    margin: 0;
+    background: #fff7e7;
+    color: #74664b;
+}
 
 .carousel-item {
     height: 80vh;
