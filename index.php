@@ -152,10 +152,39 @@ if (!isset($_SESSION['username']) && isset($_COOKIE['username']) && isset($_COOK
   
     <!-- Page Content -->
     <section class="py-5">
-        <div class="container">
-            <h1 class="fw-light">Full Page Image Slider</h1>
-            <p class="lead">Jumbo hotdog kaya mo ba to kaya mo ba to kaya mo ba to </p>
-        </div>
+    <div class="row row-cols-3 g-3">  
+    <?php
+    // database connection code
+    $con = mysqli_connect('localhost', 'root', '','NooksCranny');
+
+    // database insert SQL code
+    $sql = "SELECT * FROM products";
+
+    $result = $con->query($sql);
+
+    if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+        
+        echo '<div class="col">';
+        echo '<div class="card">';
+        echo '<img src="'.$row["img"]. '" class="card-img-top" alt="coffee" />';
+        echo '<div class="card-body">';
+        echo '<h5 class="card-title">'.$row["item_name"].'</h5>';
+        echo '<p class="card-text">'. $row["item_desc"].'</p>';
+        echo '<p class="qty">'. $row["item_price"].' Bells</p>';
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+
+    }
+    } else {
+    echo "0 results";
+    }
+    $con->close();
+
+    ?>
+    </div>
     </section>
 </body>
 </html>
