@@ -57,10 +57,11 @@ if (!isset($_SESSION['username']) && isset($_COOKIE['username']) && isset($_COOK
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <div class="navbar-nav mx-auto" id="navbar-nav-center">
-                    <a class="nav-link active" href="#" id="nav-item-home">About</a>
+                    <p>No functional other sections yet (Furniture, Clothes and Misc Buttons)</p>
+                    <!-- <a class="nav-link active" href="#" id="nav-item-home">About</a>
                     <a class="nav-link" href="#" id="nav-item-about">Furniture</a>
                     <a class="nav-link" href="#" id="nav-item-services">Clothes</a>
-                    <a class="nav-link" href="#" id="nav-item-contact">Miscellaneous</a>
+                    <a class="nav-link" href="#" id="nav-item-contact">Miscellaneous</a> -->
                 </div>
                 <ul class="navbar-nav ms-auto" id="navbar-nav-right">
                     <li class="nav-item dropdown" id="nav-item-login">
@@ -69,8 +70,8 @@ if (!isset($_SESSION['username']) && isset($_COOKIE['username']) && isset($_COOK
                                 <?php echo htmlspecialchars($_SESSION['name']); ?>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="userprofile.php">Profile</a></li>
-                                <li><a class="dropdown-item" href="#">Cart</a></li>
+                                <!-- <li><a class="dropdown-item" href="userprofile.php">Profile</a></li> -->
+                                <li><a class="dropdown-item" href="pages/cart.php">Cart</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="php/logout.php">Logout</a></li>
                             </ul>
@@ -150,41 +151,95 @@ if (!isset($_SESSION['username']) && isset($_COOKIE['username']) && isset($_COOK
         </div>
     </header>
   
-    <!-- Page Content -->
-    <section class="py-5">
-    <div class="row row-cols-3 g-3">  
-    <?php
-    // database connection code
-    $con = mysqli_connect('localhost', 'root', '','NooksCranny');
+    <div class="container mt-5"> <!-- Added mt-5 class for top margin -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <?php
+        // Database connection code
+        $con = mysqli_connect('localhost', 'root', '', 'NooksCranny');
 
-    // database insert SQL code
-    $sql = "SELECT * FROM products";
+        // Check connection
+        if (mysqli_connect_errno()) {
+            echo "Failed to connect to MySQL: " . mysqli_connect_error();
+            exit();
+        }
 
-    $result = $con->query($sql);
+        // Database query to fetch distinct item types
+        $sql = "SELECT DISTINCT item_type FROM products";
+        $result = $con->query($sql);
 
-    if ($result->num_rows > 0) {
-    // output data of each row
-    while($row = $result->fetch_assoc()) {
-        
-        echo '<div class="col">';
-        echo '<div class="card">';
-        echo '<img src="'.$row["img"]. '" class="card-img-top" alt="coffee" />';
-        echo '<div class="card-body">';
-        echo '<h5 class="card-title">'.$row["item_name"].'</h5>';
-        echo '<p class="card-text">'. $row["item_desc"].'</p>';
-        echo '<p class="qty">'. $row["item_price"].' Bells</p>';
-        echo '</div>';
-        echo '</div>';
-        echo '</div>';
+        if ($result) {
+            // Output data of each item type
+            while ($row = $result->fetch_assoc()) {
+                $itemType = $row['item_type'];
 
-    }
-    } else {
-    echo "0 results";
-    }
-    $con->close();
+                // Query products by item_type
+                $sqlProducts = "SELECT * FROM products WHERE item_type = '$itemType'";
+                $resultProducts = $con->query($sqlProducts);
 
-    ?>
+                if ($resultProducts->num_rows > 0) {
+                    // Start carousel for each item_type
+                    echo '<div class="col">';
+                    echo '<h2 class="mb-4">' . ucfirst($itemType) . '</h2>'; // Added mb-4 class for bottom margin
+                    echo '<div id="carousel_' . $itemType . '" class="carousel slide" data-bs-ride="carousel">';
+                    echo '<div class="carousel-inner">';
+
+                    $first = true; // Flag to mark the first item as active in the carousel
+
+                    while ($product = $resultProducts->fetch_assoc()) {
+                        // Construct image path
+                        $imagePath = "img/products/" . $product["item_name"] . ".png"; // or .jpg, depending on your image format
+
+                        // Determine active class for carousel item
+                        $activeClass = $first ? 'active' : '';
+                        $first = false; // Set to false after first item
+
+                        // Display carousel item
+                        echo '<div class="carousel-item ' . $activeClass . '">';
+                        echo '<div class="product-card">';
+                        echo '<img src="' . $imagePath . '" class="card-img-top" alt="' . $product["item_name"] . '">';
+                        echo '<div class="card-body">';
+                        echo '<h5 class="card-title">' . $product["item_name"] . '</h5>';
+                        echo '<p class="card-text">' . $product["item_desc"] . '</p>';
+                        echo '<p class="card-text">Price: ' . $product["item_price"] . ' Bells</p>';
+                        echo '<form action="php/addtocart.php" method="post">';
+                        echo '<input type="hidden" name="productId" value="' . $product["item_id"] . '">';
+                        echo '<button type="submit" class="btn btn-primary">Add to Cart</button>';
+                        echo '</form>';
+                        echo '</div>'; // Close card-body
+                        echo '</div>'; // Close product-card
+                        echo '</div>'; // Close carousel-item
+                    }
+
+                    echo '</div>'; // Close carousel-inner
+
+                    // Previous and next buttons
+                    echo '<button class="carousel-control-prev" type="button" data-bs-target="#carousel_' . $itemType . '" data-bs-slide="prev">';
+                    echo '<span class="carousel-control-prev-icon" aria-hidden="true"></span>';
+                    echo '<span class="visually-hidden">Previous</span>';
+                    echo '</button>';
+
+                    echo '<button class="carousel-control-next" type="button" data-bs-target="#carousel_' . $itemType . '" data-bs-slide="next">';
+                    echo '<span class="carousel-control-next-icon" aria-hidden="true"></span>';
+                    echo '<span class="visually-hidden">Next</span>';
+                    echo '</button>';
+
+                    echo '</div>'; // Close carousel
+                    echo '</div>'; // Close col
+                } else {
+                    echo '<p>No products found for ' . $itemType . '</p>';
+                }
+            }
+        } else {
+            echo "Error: " . $con->error;
+        }
+
+        // Close connection
+        $con->close();
+        ?>
     </div>
-    </section>
+</div>
+
+
+
 </body>
 </html>

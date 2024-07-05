@@ -72,54 +72,6 @@ body {
   min-width: 100px; /* Set a minimum width */
 }
 
-.btn .bi {
-  font-size: 1.5rem; 
-}
-
-#userdropdownMenuButton {
-  background-color: transparent;
-  border: none;
-  color: #000000;
-}
-
-.product-card {
-  background-color: #f8f9fa; /* Light grey background */
-  border: 1px solid #dee2e6; /* Grey border */
-  border-radius: 8px; /* Rounded corners */
-  padding: 15px; /* Padding inside the card */
-  margin-bottom: 20px; /* Space between cards */
-  transition: transform 0.3s ease-in-out; /* Smooth transition for hover effect */
-}
-
-.product-card:hover {
-  transform: translateY(-5px); /* Lift card on hover */
-}
-
-.product-card img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px; /* Rounded corners for images */
-}
-
-.product-card .card-body {
-  padding-top: 10px; /* Adjust top padding */
-}
-
-.product-card .card-title {
-  font-size: 1.2rem; /* Larger font size for title */
-  margin-bottom: 5px; /* Space below title */
-}
-
-.product-card .card-text {
-  color: #6c757d; /* Grey text color */
-}
-
-.product-card .btn-primary {
-  background-color: #007bff; /* Bootstrap blue button */
-  border: none; /* Remove button border */
-  width: 100%; /* Full width button */
-}
-
-.product-card .btn-primary:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+.container{
+    margin-top: 10rem;
 }
