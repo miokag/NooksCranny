@@ -10,6 +10,6 @@ setcookie('username', '', time() - 3600, '/');
 setcookie('userpass', '', time() - 3600, '/');
 
 // Redirect to the login page
-header("Location: ../pages/loginsignup.php");
+header("Location: ../index.php");
 exit();
 ?>

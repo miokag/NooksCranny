@@ -66,3 +66,18 @@ body {
     margin-left: auto; 
 }
 
+.dropdown-menu {
+  right: 0;
+  width: auto; /* Adjust width as needed */
+  min-width: 100px; /* Set a minimum width */
+}
+
+.btn .bi {
+  font-size: 1.5rem; 
+}
+
+#userdropdownMenuButton {
+  background-color: transparent;
+  border: none;
+  color: #000000;
+}

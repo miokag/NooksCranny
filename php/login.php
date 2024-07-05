@@ -16,10 +16,10 @@ if (isset($_POST['loginusername']) && isset($_POST['loginpass'])) {
     $remember = isset($_POST['remember']);
 
     if (empty($loginusername)) {
-        header("Location: ../pages/loginsignup.php?loginerror=Username is required");
+        header("Location: ../index.php?loginerror=Username is required");
         exit();
     } else if (empty($loginpass)) {
-        header("Location: ../pages/loginsignup.php?loginerror=Password is required");
+        header("Location: ../index.php?loginerror=Password is required");
         exit();
     } else {
         $sql = "SELECT * FROM users WHERE username='$loginusername'";
@@ -40,16 +40,16 @@ if (isset($_POST['loginusername']) && isset($_POST['loginpass'])) {
                 header("Location: ../index.php");
                 exit();
             } else {
-                header("Location: ../pages/loginsignup.php?loginerror=Incorrect username or password");
+                header("Location: ../index.php?loginerror=Incorrect username or password");
                 exit();
             }
         } else {
-            header("Location: ../pages/loginsignup.php?loginerror=Incorrect username or password");
+            header("Location: ../index.php?loginerror=Incorrect username or password");
             exit();
         }
     }
 } else {
-    header("Location: ../pages/loginsignup.php?loginerror=Invalid request");
+    header("Location: ../index.php?loginerror=Invalid request");
     exit();
 }
 ?>

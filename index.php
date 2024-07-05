@@ -1,18 +1,21 @@
 <?php
 session_start();
 
-// Check if the user is already logged in via session
+// Check if the user is already logged in via session or cookies
 if (!isset($_SESSION['username']) && isset($_COOKIE['username']) && isset($_COOKIE['userpass'])) {
     include "db_conn.php";
 
-    $username = $_COOKIE['username'];
-    $userpass = $_COOKIE['userpass'];
+    $username = htmlspecialchars($_COOKIE['username']);
+    $userpass = htmlspecialchars($_COOKIE['userpass']);
 
-    $sql = "SELECT * FROM users WHERE username='$username'";
-    $result = mysqli_query($conn, $sql);
+    $sql = "SELECT * FROM users WHERE username=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    if (mysqli_num_rows($result) === 1) {
-        $row = mysqli_fetch_assoc($result);
+    if ($result->num_rows === 1) {
+        $row = $result->fetch_assoc();
         if (password_verify($userpass, $row['password'])) {
             // Store user information in session variables
             $_SESSION['username'] = $row['username'];
@@ -46,40 +49,68 @@ if (!isset($_SESSION['username']) && isset($_COOKIE['username']) && isset($_COOK
 </head>
 <body>
     <!-- Navigation -->
-<nav class="navbar navbar-expand-lg fixed-top" id="navbar">
-    <div class="container-fluid" id="navbar-container">
-        <a class="navbar-brand" href="index.php" id="navbar-brand">Nook's Cranny</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <div class="navbar-nav mx-auto" id="navbar-nav-center">
-                <a class="nav-link active" href="#" id="nav-item-home">About</a>
-                <a class="nav-link" href="#" id="nav-item-about">Furniture</a>
-                <a class="nav-link" href="#" id="nav-item-services">Clothes</a>
-                <a class="nav-link" href="#" id="nav-item-contact">Miscellaneous</a>
+    <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
+        <div class="container-fluid" id="navbar-container">
+            <a class="navbar-brand" href="index.php" id="navbar-brand">Nook's Cranny</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <div class="navbar-nav mx-auto" id="navbar-nav-center">
+                    <a class="nav-link active" href="#" id="nav-item-home">About</a>
+                    <a class="nav-link" href="#" id="nav-item-about">Furniture</a>
+                    <a class="nav-link" href="#" id="nav-item-services">Clothes</a>
+                    <a class="nav-link" href="#" id="nav-item-contact">Miscellaneous</a>
+                </div>
+                <ul class="navbar-nav ms-auto" id="navbar-nav-right">
+                    <li class="nav-item dropdown" id="nav-item-login">
+                        <?php if (isset($_SESSION['username'])): ?>
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <?php echo htmlspecialchars($_SESSION['name']); ?>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="userprofile.php">Profile</a></li>
+                                <li><a class="dropdown-item" href="#">Cart</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="php/logout.php">Logout</a></li>
+                            </ul>
+                        <?php else: ?>
+                            <div class="dropdown user-toggle">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="userdropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person"></i>
+                                </button>
+                                <form class="dropdown-menu p-4 dropdown-menu-end" aria-labelledby="userdropdownMenuButton" action="php/login.php" method="post">
+                                    <div class="form-group">
+                                        <label for="loginusername">Username</label>
+                                        <input type="text" class="form-control" id="loginusername" name="loginusername" placeholder="Username" autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="loginpass">Password</label>
+                                        <input type="password" class="form-control" id="loginpass" name="loginpass" placeholder="Password" autocomplete="off">
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="remember-me" name="remember-me">
+                                        <label class="form-check-label" for="remember-me">
+                                            Remember me
+                                        </label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary custom-signin-btn">Sign in</button>
+                                    <?php if(isset($_GET['loginerror'])) { ?>
+                                        <div class="alert alert-danger mt-3" role="alert">
+                                            <?php echo htmlspecialchars($_GET['loginerror']); ?>
+                                        </div>
+                                    <?php } ?>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="pages/loginsignup.php">New around here? Sign up</a>
+                                    <a class="dropdown-item" href="pages/user/forgotpass.html">Forgot password?</a>
+                                </form>
+                            </div>
+                        <?php endif; ?>
+                    </li>
+                </ul>
             </div>
-            <ul class="navbar-nav ms-auto" id="navbar-nav-right">
-                <li class="nav-item dropdown" id="nav-item-login">
-                    <?php if (isset($_SESSION['username'])): ?>
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <?php echo htmlspecialchars($_SESSION['name']); ?>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="userprofile.php">Profile</a></li>
-                            <li><a class="dropdown-item" href="#">Cart</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="php/logout.php">Logout</a></li>
-                        </ul>
-                    <?php else: ?>
-                        <a class="nav-link" href="pages/loginsignup.php">Login</a>
-                    <?php endif; ?>
-                </li>
-            </ul>
         </div>
-    </div>
-</nav>
-
+    </nav>
 
     <header>
         <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
@@ -123,7 +154,7 @@ if (!isset($_SESSION['username']) && isset($_COOKIE['username']) && isset($_COOK
     <section class="py-5">
         <div class="container">
             <h1 class="fw-light">Full Page Image Slider</h1>
-            <p class="lead">Jumbo hotdog kaya mo ba to kaya mo ba to kaya mo ba </p>
+            <p class="lead">Jumbo hotdog kaya mo ba to kaya mo ba to kaya mo ba to </p>
         </div>
     </section>
 </body>
