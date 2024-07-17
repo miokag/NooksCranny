@@ -48,8 +48,11 @@ if ($result->num_rows === 1) {
     echo "User not found";
 }
 
-// Redirect to index.php after adding to cart
-header('Location: ../index.php');
+// Determine the page to redirect to after adding to cart
+$redirectPage = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '../index.php';
+
+// Redirect to the determined page
+header("Location: $redirectPage");
 exit();
 
 $stmt->close();

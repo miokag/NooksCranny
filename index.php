@@ -57,11 +57,10 @@ if (!isset($_SESSION['username']) && isset($_COOKIE['username']) && isset($_COOK
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <div class="navbar-nav mx-auto" id="navbar-nav-center">
-                    <p>No functional other sections yet (Furniture, Clothes and Misc Buttons)</p>
-                    <!-- <a class="nav-link active" href="#" id="nav-item-home">About</a>
-                    <a class="nav-link" href="#" id="nav-item-about">Furniture</a>
-                    <a class="nav-link" href="#" id="nav-item-services">Clothes</a>
-                    <a class="nav-link" href="#" id="nav-item-contact">Miscellaneous</a> -->
+                    <a class="nav-link active" href="#" id="nav-item-home">Home</a>
+                    <a class="nav-link" href="pages/furniture.php" id="nav-item-about">Furniture</a>
+                    <a class="nav-link" href="pages/clothes.php" id="nav-item-services">Clothes</a>
+                    <a class="nav-link" href="pages/miscellaneous.php" id="nav-item-contact">Miscellaneous</a>
                 </div>
                 <ul class="navbar-nav ms-auto" id="navbar-nav-right">
                     <li class="nav-item dropdown" id="nav-item-login">
@@ -123,21 +122,18 @@ if (!isset($_SESSION['username']) && isset($_COOKIE['username']) && isset($_COOK
             <div class="carousel-inner">
                 <div class="carousel-item active" style="background-image: url('https://pbs.twimg.com/media/GKlZFlwW4AARSZX?format=jpg&name=large')">
                     <div class="carousel-caption">
-                        <h5>First slide label</h5>
-                        <p>Some representative placeholder content for the first slide.</p>
+                        <h5>New Horizons!</h5>
+                        <p>In New Horizons, you who moves to a deserted island after purchasing a getaway package from Tom Nook, can accomplish assigned tasks, and develop the island as they choose.</p>
                     </div>
                 </div>
-                <div class="carousel-item" style="background-image: url('https://pbs.twimg.com/media/GIG4b2JWoAAxiAe?format=jpg&name=large')">
-                    <div class="carousel-caption">
-                        <h5>Second slide label</h5>
-                        <p>Some representative placeholder content for the second slide.</p>
-                    </div>
+                <div class="carousel-item">
+                    <!-- Video slide -->
+                    <video autoplay muted loop class="w-100">
+                        <source src="img/carouselvid.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
-                <div class="carousel-item" style="background-image: url('https://pbs.twimg.com/media/F55_GbuaUAAdPic?format=jpg&name=large')">
-                    <div class="carousel-caption">
-                        <h5>Third slide label</h5>
-                        <p>Some representative placeholder content for the third slide.</p>
-                    </div>
+
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
@@ -151,95 +147,147 @@ if (!isset($_SESSION['username']) && isset($_COOKIE['username']) && isset($_COOK
         </div>
     </header>
   
-    <div class="container mt-5"> <!-- Added mt-5 class for top margin -->
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        <?php
-        // Database connection code
-        $con = mysqli_connect('localhost', 'root', '', 'NooksCranny');
+    <div class="container-fluid p-5 mt-5">
+        <div class="row row-cols-1 g-4">
+            <?php
+            // Database connection code
+            $con = mysqli_connect('localhost', 'root', '', 'NooksCranny');
 
-        // Check connection
-        if (mysqli_connect_errno()) {
-            echo "Failed to connect to MySQL: " . mysqli_connect_error();
-            exit();
-        }
-
-        // Database query to fetch distinct item types
-        $sql = "SELECT DISTINCT item_type FROM products";
-        $result = $con->query($sql);
-
-        if ($result) {
-            // Output data of each item type
-            while ($row = $result->fetch_assoc()) {
-                $itemType = $row['item_type'];
-
-                // Query products by item_type
-                $sqlProducts = "SELECT * FROM products WHERE item_type = '$itemType'";
-                $resultProducts = $con->query($sqlProducts);
-
-                if ($resultProducts->num_rows > 0) {
-                    // Start carousel for each item_type
-                    echo '<div class="col">';
-                    echo '<h2 class="mb-4">' . ucfirst($itemType) . '</h2>'; // Added mb-4 class for bottom margin
-                    echo '<div id="carousel_' . $itemType . '" class="carousel slide" data-bs-ride="carousel">';
-                    echo '<div class="carousel-inner">';
-
-                    $first = true; // Flag to mark the first item as active in the carousel
-
-                    while ($product = $resultProducts->fetch_assoc()) {
-                        // Construct image path
-                        $imagePath = "img/products/" . $product["item_name"] . ".png"; // or .jpg, depending on your image format
-
-                        // Determine active class for carousel item
-                        $activeClass = $first ? 'active' : '';
-                        $first = false; // Set to false after first item
-
-                        // Display carousel item
-                        echo '<div class="carousel-item ' . $activeClass . '">';
-                        echo '<div class="product-card">';
-                        echo '<img src="' . $imagePath . '" class="card-img-top" alt="' . $product["item_name"] . '">';
-                        echo '<div class="card-body">';
-                        echo '<h5 class="card-title">' . $product["item_name"] . '</h5>';
-                        echo '<p class="card-text">' . $product["item_desc"] . '</p>';
-                        echo '<p class="card-text">Price: ' . $product["item_price"] . ' Bells</p>';
-                        echo '<form action="php/addtocart.php" method="post">';
-                        echo '<input type="hidden" name="productId" value="' . $product["item_id"] . '">';
-                        echo '<button type="submit" class="btn btn-primary">Add to Cart</button>';
-                        echo '</form>';
-                        echo '</div>'; // Close card-body
-                        echo '</div>'; // Close product-card
-                        echo '</div>'; // Close carousel-item
-                    }
-
-                    echo '</div>'; // Close carousel-inner
-
-                    // Previous and next buttons
-                    echo '<button class="carousel-control-prev" type="button" data-bs-target="#carousel_' . $itemType . '" data-bs-slide="prev">';
-                    echo '<span class="carousel-control-prev-icon" aria-hidden="true"></span>';
-                    echo '<span class="visually-hidden">Previous</span>';
-                    echo '</button>';
-
-                    echo '<button class="carousel-control-next" type="button" data-bs-target="#carousel_' . $itemType . '" data-bs-slide="next">';
-                    echo '<span class="carousel-control-next-icon" aria-hidden="true"></span>';
-                    echo '<span class="visually-hidden">Next</span>';
-                    echo '</button>';
-
-                    echo '</div>'; // Close carousel
-                    echo '</div>'; // Close col
-                } else {
-                    echo '<p>No products found for ' . $itemType . '</p>';
-                }
+            // Check connection
+            if (mysqli_connect_errno()) {
+                echo "Failed to connect to MySQL: " . mysqli_connect_error();
+                exit();
             }
-        } else {
-            echo "Error: " . $con->error;
-        }
 
-        // Close connection
-        $con->close();
-        ?>
+            // Database query to fetch distinct item types
+            $sql = "SELECT DISTINCT item_type FROM products";
+            $result = $con->query($sql);
+
+            if ($result) {
+                // Fetch all item types into an array
+                $itemTypes = [];
+                while ($row = $result->fetch_assoc()) {
+                    $itemTypes[] = $row['item_type'];
+                }
+
+                // Loop through each item type
+                foreach ($itemTypes as $itemType) {
+                    // Query products by item_type
+                    $sqlProducts = "SELECT * FROM products WHERE item_type = '$itemType'";
+                    $resultProducts = $con->query($sqlProducts);
+
+                    if ($resultProducts->num_rows > 0) {
+                        // Fetch all products for the current item type
+                        $products = mysqli_fetch_all($resultProducts, MYSQLI_ASSOC);
+
+                        // Start a new column for each item type with heading
+                        echo '<div class="col">';
+                        echo '<h2>' . ucfirst($itemType) . '</h2>'; // Display item type as heading
+
+                        // Start carousel for this item type
+                        echo '<div id="carousel_' . $itemType . '" class="carousel slide mb-5" style="max-height: 40vh; overflow: hidden;" data-bs-ride="carousel" data-bs-interval="3000">';
+                        echo '<div class="carousel-inner">';
+
+                        $numItems = count($products);
+                        $itemsPerSlide = 5; // Number of items per slide
+
+                        for ($slide = 0; $slide < ceil($numItems / $itemsPerSlide); $slide++) {
+                            echo '<div class="carousel-item ' . ($slide === 0 ? 'active' : '') . '">';
+                            echo '<div class="row row-cols-1 row-cols-md-5 g-4 align-items-stretch" style="max-height: 40vh">'; // Row for product cards, align items to stretch height
+
+                            // Loop through items for this slide
+                            for ($i = 0; $i < $itemsPerSlide; $i++) {
+                                $index = ($slide * $itemsPerSlide + $i) % $numItems;
+                                if ($index < $numItems) {
+                                    $product = $products[$index];
+
+                                    // Construct image path
+                                    $imagePath = "img/products/" . $product["item_name"] . ".png"; 
+
+                                    // Product card
+                                    echo '<div class="col mb-4">';
+                                    echo '<div class="card product-card h-100">'; // Ensure each card is the same height
+                                    echo '<img src="' . $imagePath . '" class="card-img-top" alt="' . $product["item_name"] . '">';
+                                    echo '<div class="card-body">';
+                                    echo '<h5 class="card-title">' . $product["item_name"] . '</h5>';
+                                    echo '<p class="card-text">Price: ' . $product["item_price"] . ' Bells</p>';
+                                    echo '</div>'; // Close card-body
+                                    
+                                    // Add to Cart form
+                                    echo '<form action="php/addtocart.php" method="post">';
+                                    echo '<input type="hidden" name="productId" value="' . $product["item_id"] . '">';
+
+                                    // Check if user is logged in
+                                    if (isset($_SESSION['username'])) {
+                                        echo '<button type="submit" class="btn btn-primary d-flex justify-content-center align-items-center" style="width: 100%; height: 3vh; margin-bottom: 3vh">Add to Cart</button>';
+                                    } else {
+                                        echo '<button type="button" class="btn btn-primary d-flex justify-content-center align-items-center" style="width: 100%; height: 3vh; margin-bottom: 3vh" onclick="showLoginPrompt()">Add to Cart</button>';
+                                    }
+                                    echo '</form>';
+
+                                    echo '</div>'; // Close card
+                                    echo '</div>'; // Close col
+                                }
+                            }
+                            echo '</div>'; // Close row
+                            echo '</div>'; // Close carousel-item
+                        }
+
+                        // Previous and next buttons
+                        echo '<button class="carousel-control-prev" type="button" data-bs-target="#carousel_' . $itemType . '" data-bs-slide="prev">';
+                        echo '<span class="carousel-control-prev-icon" aria-hidden="true"></span>';
+                        echo '<span class="visually-hidden">Previous</span>';
+                        echo '</button>';
+
+                        echo '<button class="carousel-control-next" type="button" data-bs-target="#carousel_' . $itemType . '" data-bs-slide="next">';
+                        echo '<span class="carousel-control-next-icon" aria-hidden="true"></span>';
+                        echo '<span class="visually-hidden">Next</span>';
+                        echo '</button>';
+
+                        echo '</div>'; // Close carousel
+                        echo '</div>'; // Close col
+                        echo '</div>'; // Close col (added for each item type)
+                    } else {
+                        echo '<p>No products found for ' . $itemType . '</p>';
+                    }
+                }
+            } else {
+                echo "Error: " . $con->error;
+            }
+
+            // Close connection
+            $con->close();
+            ?>
+        </div>
+        
+    </div>
+
+    
+
+    <!-- Modal -->
+    <div class="modal fade" id="loginPromptModal" tabindex="-1" aria-labelledby="loginPromptModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginPromptModalLabel">Login Required</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>You need to login to add items to your cart.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>
 
-
+    <!-- Script to show login prompt -->
+    <script>
+        function showLoginPrompt() {
+            $('#loginPromptModal').modal('show');
+        }
+    </script>
 
 </body>
 </html>

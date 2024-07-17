@@ -37,7 +37,7 @@ $offset = ($page - 1) * $itemsPerPage;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clothes - Nook's Cranny</title>
+    <title>Miscellaneous - Nook's Cranny</title>
     <link rel="icon" type="image/x-icon" href="img/Apps.png">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
@@ -53,7 +53,7 @@ $offset = ($page - 1) * $itemsPerPage;
     <!-- Owl Carousel JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <!-- Your custom styles -->
-    <link rel="stylesheet" href="../style/clothesstyle.css">
+    <link rel="stylesheet" href="../style/miscstyle.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
@@ -69,9 +69,9 @@ $offset = ($page - 1) * $itemsPerPage;
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <div class="navbar-nav mx-auto" id="navbar-nav-center">
                     <a class="nav-link" href="../index.php" id="nav-item-home">Home</a>
-                    <a class="nav-link active" href="furniture.php" id="nav-item-about">Furniture</a>
-                    <a class="nav-link active"  id="nav-item-services">Clothes</a>
-                    <a class="nav-link" href="miscellaneous.php" id="nav-item-contact">Miscellaneous</a>
+                    <a class="nav-link" href="furniture.php" id="nav-item-about">Furniture</a>
+                    <a class="nav-link" href="clothes.php" id="nav-item-services">Clothes</a>
+                    <a class="nav-link active" href="miscellaneous.php" id="nav-item-contact">Miscellaneous</a>
                 </div>
                 <ul class="navbar-nav ms-auto" id="navbar-nav-right">
                     <li class="nav-item dropdown" id="nav-item-login">
@@ -128,7 +128,7 @@ $offset = ($page - 1) * $itemsPerPage;
                 <div class="carousel-item active">
                     <!-- Video slide -->
                     <video autoplay muted loop class="w-100">
-                        <source src="../img/clothescaro.mp4" type="video/mp4">
+                        <source src="../img/toolscaro.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                 </div>
@@ -138,8 +138,8 @@ $offset = ($page - 1) * $itemsPerPage;
     </header>
 
     <div class="header">
-        <img src="../img/ClothesPic.png" alt="Header Image" styles="text-align: center;">
-        <h1 styles="text-align: center;">Clothes</h1>
+        <img src="../img/MiscPic.png" alt="Header Image" styles="text-align: center;">
+        <h1 styles="text-align: center;">Miscellaneous</h1>
     </div>
 
     <div class="container mt-5 mb-5">
@@ -202,8 +202,8 @@ function fetchUserName($userId, $conn) {
     return $row['username'] ?? 'Unknown User';
 }
 
-// Fetch clothes products with pagination
-$sql = "SELECT * FROM products WHERE item_type='clothes' LIMIT ? OFFSET ?";
+// Fetch misc products with pagination
+$sql = "SELECT * FROM products WHERE item_type='tools' LIMIT ? OFFSET ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('ii', $itemsPerPage, $offset);
 $stmt->execute();
@@ -347,11 +347,11 @@ foreach ($paragraphs as $paragraph) {
     echo '</div>'; // End row
 
 } else {
-    echo "<p class='text-center'>No products found in the 'clothes' category.</p>";
+    echo "<p class='text-center'>No products found in the 'miscellaneous' category.</p>";
 }
 
 // Calculate total number of pages
-$sql = "SELECT COUNT(*) AS total FROM products WHERE item_type='clothes'";
+$sql = "SELECT COUNT(*) AS total FROM products WHERE item_type='tools'";
 $result = $conn->query($sql);
 $row = $result->fetch_assoc();
 $totalPages = ceil($row['total'] / $itemsPerPage);

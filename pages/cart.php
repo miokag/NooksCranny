@@ -11,7 +11,7 @@ include "../php/db_conn.php"; // Include your database connection file
 $username = $_SESSION['username'];
 
 // Query to fetch cart items for the logged-in user
-$sql = "SELECT products.item_name, products.item_price, cart.quantity
+$sql = "SELECT cart.order_id, cart.item_id, cart.quantity, products.item_name, products.item_price
         FROM cart
         INNER JOIN products ON cart.item_id = products.item_id
         INNER JOIN users ON cart.user_id = users.id
@@ -32,13 +32,89 @@ $totalPrice = 0;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nook's Cranny - Shopping Cart</title>
-    <link rel="icon" type="image/x-icon" href="img/Apps.png">
+    <link rel="icon" type="image/x-icon" href="../img/Apps.png">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
     <!-- Your custom styles -->
     <link rel="stylesheet" href="../style/cartstyle.css">
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Function to update quantity and total price dynamically
+            function updateQuantity(orderId, change, itemPrice) {
+                var quantityElement = $('#quantity' + orderId);
+                var currentQuantity = parseInt(quantityElement.val());
+                var newQuantity = currentQuantity + change;
+
+                if (newQuantity < 1) {
+                    newQuantity = 1; // Minimum quantity should be 1
+                }
+
+                // Update quantity input
+                quantityElement.val(newQuantity);
+
+                // Calculate new total item price
+                var newTotalPrice = newQuantity * itemPrice;
+                $('#totalItemPrice' + orderId).text(newTotalPrice.toFixed(2) + ' Bells');
+
+                // Update total price of all items
+                calculateTotalPrice();
+            }
+
+            // Function to calculate total price of all items
+            function calculateTotalPrice() {
+                var totalPrice = 0;
+                $('.item-total-price').each(function() {
+                    var priceText = $(this).text().replace(' Bells', '').trim();
+                    totalPrice += parseFloat(priceText);
+                });
+
+                $('#totalPrice').text(totalPrice.toFixed(2) + ' Bells');
+            }
+
+            // Event listener for minus button
+            $(document).on('click', '.btn-minus', function() {
+                var orderId = $(this).data('order-id');
+                var itemPrice = parseFloat($(this).data('item-price')); // Parse item price as float
+                updateQuantity(orderId, -1, itemPrice);
+            });
+
+            // Event listener for plus button
+            $(document).on('click', '.btn-plus', function() {
+                var orderId = $(this).data('order-id');
+                var itemPrice = parseFloat($(this).data('item-price')); // Parse item price as float
+                updateQuantity(orderId, 1, itemPrice);
+            });
+
+            // Event listener for remove button
+            $(document).on('click', '.btn-remove', function() {
+                var orderId = $(this).data('order-id');
+
+                // AJAX request to remove item from cart
+                $.ajax({
+                    url: '../php/remove_item.php', // PHP script to handle remove item logic
+                    type: 'POST',
+                    data: { orderId: orderId },
+                    success: function(response) {
+                        // Refresh or update the cart display after removal
+                        location.reload(); // Example: Reload the page after removal
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error removing item:', error);
+                        // Handle error case if needed
+                    }
+                });
+            });
+
+            // Initial calculation of total price when the page loads
+            calculateTotalPrice();
+        });
+    </script>
 </head>
 
 <body>
@@ -51,11 +127,10 @@ $totalPrice = 0;
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <div class="navbar-nav mx-auto" id="navbar-nav-center">
-                    <p>No proper layout for this yet, will add the checkout and will customize it though.</p>
-                    <!-- <a class="nav-link active" href="#" id="nav-item-home">About</a>
-                    <a class="nav-link" href="#" id="nav-item-about">Furniture</a>
-                    <a class="nav-link" href="#" id="nav-item-services">Clothes</a>
-                    <a class="nav-link" href="#" id="nav-item-contact">Miscellaneous</a> -->
+                    <a class="nav-link" href="../index.php" id="nav-item-home">Home</a>
+                    <a class="nav-link" href="../pages/furniture.php" id="nav-item-about">Furniture</a>
+                    <a class="nav-link" href="../pages/clothes.php" id="nav-item-services">Clothes</a>
+                    <a class="nav-link" href="../pages/miscellaneous.php" id="nav-item-contact">Miscellaneous</a>
                 </div>
                 <ul class="navbar-nav ms-auto" id="navbar-nav-right">
                     <li class="nav-item dropdown" id="nav-item-login">
@@ -69,10 +144,11 @@ $totalPrice = 0;
             </div>
         </div>
     </nav>
+
     <div class="container-fluid mt-5">
-        <div class="row justify-content-center align-items-center"> <!-- Center the content vertically and horizontally -->
-            <div class="col-lg-8"> <!-- Adjust the width of the column as per your design -->
-                <h1 class="mb-4">Shopping Cart</h1>
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-8">
+                <h1 class="mb-4 mt-5">Shopping Cart</h1>
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead>
@@ -81,35 +157,48 @@ $totalPrice = 0;
                                 <th>Price</th>
                                 <th>Quantity</th>
                                 <th>Total</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php while ($row = $result->fetch_assoc()) : ?>
-                                <?php
-                                $itemName = $row['item_name'];
-                                $itemPrice = $row['item_price'];
-                                $quantity = $row['quantity'];
-                                $totalItemPrice = $itemPrice * $quantity;
-                                $totalPrice += $totalItemPrice;
-                                ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($itemName); ?></td>
-                                    <td><?php echo number_format($itemPrice, 2); ?> Bells</td>
-                                    <td><?php echo $quantity; ?></td>
-                                    <td><?php echo number_format($totalItemPrice, 2); ?> Bells</td>
-                                </tr>
-                            <?php endwhile; ?>
+                        <?php while ($row = $result->fetch_assoc()) : ?>
+                        <?php
+                        $orderId = $row['order_id'];
+                        $itemName = $row['item_name'];
+                        $itemPrice = $row['item_price'];
+                        $quantity = $row['quantity'];
+                        $totalItemPrice = $itemPrice * $quantity;
+                        $totalPrice += $totalItemPrice;
+                        ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($itemName); ?></td>
+                            <td><?php echo number_format($itemPrice, 2); ?> Bells</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <button class="btn btn-sm btn-outline-secondary btn-minus" data-order-id="<?php echo $orderId; ?>" data-item-price="<?php echo $itemPrice; ?>">-</button>
+                                    <input id="quantity<?php echo $orderId; ?>" type="text" class="form-control quantity-input mx-1" value="<?php echo $quantity; ?>" readonly>
+                                    <button class="btn btn-sm btn-outline-secondary btn-plus" data-order-id="<?php echo $orderId; ?>" data-item-price="<?php echo $itemPrice; ?>">+</button>
+                                </div>
+                            </td>
+                            <td id="totalItemPrice<?php echo $orderId; ?>" class="item-total-price"><?php echo number_format($totalItemPrice, 2); ?> Bells</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-danger btn-remove" data-order-id="<?php echo $orderId; ?>">Remove</button>
+                            </td>
+                        </tr>
+                        <?php endwhile; ?>
 
-                            <tr>
-                                <td colspan="3" class="text-end"><strong>Total:</strong></td>
-                                <td><strong><?php echo number_format($totalPrice, 2); ?> Bells</strong></td>
-                            </tr>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                            <td id="totalPrice"><strong><?php echo number_format($totalPrice, 2); ?> Bells</strong></td>
+                            <td></td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+
 </body>
 
 </html>

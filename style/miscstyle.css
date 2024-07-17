@@ -13,12 +13,12 @@
 
 body {
     margin: 0;
-    background-image: url("../img/BG.png");
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
+    background: #fff7e7;
     color: #74664b;
-    
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
 }
 
 .carousel-item {
@@ -41,7 +41,6 @@ body {
   #navbar-container {
     display: flex;
     align-items: center; /* Center items vertically */
-    font-size: large;
   }
   
   #navbar-nav-center {
@@ -56,11 +55,10 @@ body {
     text-decoration: none;
     color: #331300;
     transition: color 0.3s;
-    font-size:x-large;
   }
   
   .nav-link:hover {
-    color: #64531b;
+    color: #ffeba7;
   }
   
   .condition-container {
@@ -88,57 +86,30 @@ body {
   color: #000000;
 }
 
-.product-card {
-  background-color: #F8F4E8; 
-  border: 1px solid #dee2e6; 
-  border-radius: 8px; 
-  padding: 15px; 
-  margin-bottom: 20px; 
-  transition: transform 0.3s ease-in-out; 
-  display: flex; 
-  align-items: center; 
-}
-
-
-.product-card:hover {
-  transform: translateY(-5px); /* Lift card on hover */
-}
-
-
-.product-card .card-body {
-  padding-top: 10px; /* Adjust top padding */
-}
-
-.product-card .card-title {
-  font-size: 1.2rem; /* Larger font size for title */
-  margin-bottom: 5px; /* Space below title */
-}
 
 .card-img-top {
-  width: 60%;
+  width: 50%
 }
 
-.product-card .card-text {
-  color: #6c757d; /* Grey text color */
-}
+  .header {
+      text-align: center;
+      margin-bottom: 20px;
+      margin-top: 4vh; /* Adjust the vertical space between header and navbar */
+  }
 
-.product-card .btn-primary {
-  background-color: #007bff; /* Bootstrap blue button */
-  border: none; /* Remove button border */
-  width: 100%; /* Full width button */
-}
+  .header img {
+      max-width: 100%; /* Ensures the image scales within its container */
+  }
 
-.product-card .btn-primary:hover {
-  background-color: #0056b3; /* Darker blue on hover */
-}
+  .header h1 {
+      margin-top: 10px; /* Adjust the vertical space between image and heading */
+  }
 
-.footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: #ffdfa0; /* Match your navbar color */
-  color: #331300; /* Match your text color */
-  padding: 10px 0;
-  text-align: center;
-}
+  .btn {
+    background-color: #331300;
+    color: aliceblue;
+  }
 
+  .btn:hover {
+    background-color: #77350f;
+  }
