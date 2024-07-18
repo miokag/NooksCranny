@@ -56,7 +56,6 @@ body {
     text-decoration: none;
     color: #331300;
     transition: color 0.3s;
-    font-size:x-large;
   }
   
   .nav-link:hover {
@@ -80,6 +79,10 @@ body {
 
 .btn .bi {
   font-size: 1.5rem; 
+}
+
+.btn .btn-primary {
+  background-color: #331300;
 }
 
 #userdropdownMenuButton {
@@ -123,22 +126,21 @@ body {
 }
 
 .product-card .btn-primary {
-  background-color: #007bff; /* Bootstrap blue button */
-  border: none; /* Remove button border */
-  width: 100%; /* Full width button */
+  background-color: #331300 !important; /* Your custom background color */
+  border: none !important; /* Remove button border */
+  width: 100% !important; /* Full width button */
 }
 
 .product-card .btn-primary:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #64531b !important; /* Darker color on hover */
 }
 
-.footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: #ffdfa0; /* Match your navbar color */
-  color: #331300; /* Match your text color */
-  padding: 10px 0;
-  text-align: center;
+.custom-signin-btn {
+  background-color: #331300 !important; /* Change background color to brown */
+  color: #ffffff !important; /* Change text color to white */
+  border: none; /* Remove button border */
 }
 
+.custom-signin-btn:hover {
+  background-color: #64531b !important; /* Darker brown on hover */
+}

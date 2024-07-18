@@ -94,7 +94,8 @@ if (!isset($_SESSION['username']) && isset($_COOKIE['username']) && isset($_COOK
                                             Remember me
                                         </label>
                                     </div>
-                                    <button type="submit" class="btn btn-primary custom-signin-btn">Sign in</button>
+                                    <button type="submit" class="btn btn-primary custom-signin-btn d-flex justify-content-center align-items-center" style="width: 100%; height: 3vh; margin-bottom: 3vh">Sign in</button>
+
                                     <?php if(isset($_GET['loginerror'])) { ?>
                                         <div class="alert alert-danger mt-3" role="alert">
                                             <?php echo htmlspecialchars($_GET['loginerror']); ?>

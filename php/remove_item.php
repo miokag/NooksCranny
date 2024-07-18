@@ -20,14 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['orderId'])) {
     // Check if deletion was successful
     if ($stmt->affected_rows > 0) {
         // Item removed successfully
-        echo 'Item removed from cart.';
+        echo 'success';
     } else {
         // Error occurred while removing item
-        echo 'Failed to remove item from cart.';
+        echo 'error';
     }
 
     $stmt->close();
 }
-a
+
 $conn->close();
 ?>
